@@ -1,12 +1,20 @@
-from app.utils.export import export_to_excel
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.urls import reverse_lazy
-from django.db.models import ProtectedError
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db.models import ProtectedError
 from django.shortcuts import redirect
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
-from . import models, forms
+from django.urls import reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
+from rest_framework import generics
+
+from app.utils.export import export_to_excel
+from . import forms, models, serializers
 
 class BrandListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = models.Brand
@@ -80,3 +88,13 @@ def export_brands_xlsx(request):
         ]
     
     return export_to_excel(brands, headers, get_row, "brands.xlsx")
+
+
+class BrandCreateListAPIView(generics.ListCreateAPIView):
+    queryset = models.Brand.objects.all()
+    serializer_class = serializers.BrandSerializer
+
+
+class BrandRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Brand.objects.all()
+    serializer_class = serializers.BrandSerializer
