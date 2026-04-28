@@ -14,7 +14,7 @@
     </form>
 
     <div class="table-toolbar-spacer"></div>
-
+    <a href="{% url 'export_inflows' %}" class="btn btn-success"><i class="bi bi-file-earmark-excel"></i> Exportar Excel</a>
     {% if perms.inflows.add_inflow %}
     <a href="{% url 'inflow_create' %}" class="btn btn-primary">
       <i class="bi bi-plus"></i> Nova Entrada
