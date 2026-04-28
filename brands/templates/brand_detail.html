@@ -6,20 +6,24 @@
 <div style="max-width:480px;">
   <div class="page-header">
     <div>
-      <div class="page-title">{{ item.name }}</div>
+      <div class="page-title">{{ brands.name }}</div>
       <div class="page-subtitle">Detalhes da Marca</div>
     </div>
     <div class="btn-group">
       {% if perms.brands.change_brand %}
-      <a href="{% url 'brand_update' item.id %}" class="btn btn-secondary"><i class="bi bi-pencil"></i> Editar</a>
+      <a href="{% url 'brand_update' brands.id %}" class="btn btn-secondary"><i class="bi bi-pencil"></i> Editar</a>
       {% endif %}
       <a href="{% url 'brand_list' %}" class="btn btn-ghost"><i class="bi bi-arrow-left"></i> Voltar</a>
     </div>
   </div>
   <div class="card">
-    <div style="padding:16px 20px;">
+    <div style="padding:16px 20px;border-bottom:1px solid var(--border);">
       <div class="metric-label">Nome</div>
-      <div style="color:var(--text);font-weight:500;font-size:16px;">{{ item.name }}</div>
+      <div style="color:var(--text);font-weight:500;font-size:16px;">{{ brands.name }}</div>
+    </div>
+    <div style="padding:16px 20px;">
+      <div class="metric-label">Descrição</div>
+      <div style="color:var(--text-2);line-height:1.7;">{{ brands.description|default:"Sem descrição." }}</div>
     </div>
   </div>
 </div>

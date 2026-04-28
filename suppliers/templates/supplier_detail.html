@@ -6,12 +6,12 @@
 <div style="max-width:480px;">
   <div class="page-header">
     <div>
-      <div class="page-title">{{ item.name }}</div>
+      <div class="page-title">{{ suppliers.name }}</div>
       <div class="page-subtitle">Detalhes da Fornecedor</div>
     </div>
     <div class="btn-group">
       {% if perms.suppliers.change_supplier %}
-      <a href="{% url 'supplier_update' item.id %}" class="btn btn-secondary"><i class="bi bi-pencil"></i> Editar</a>
+      <a href="{% url 'supplier_update' suppliers.id %}" class="btn btn-secondary"><i class="bi bi-pencil"></i> Editar</a>
       {% endif %}
       <a href="{% url 'supplier_list' %}" class="btn btn-ghost"><i class="bi bi-arrow-left"></i> Voltar</a>
     </div>
@@ -19,7 +19,11 @@
   <div class="card">
     <div style="padding:16px 20px;">
       <div class="metric-label">Nome</div>
-      <div style="color:var(--text);font-weight:500;font-size:16px;">{{ item.name }}</div>
+      <div style="color:var(--text);font-weight:500;font-size:16px;">{{ suppliers.name }}</div>
+    </div>
+    <div style="padding:16px 20px;">
+      <div class="metric-label">Descrição</div>
+      <div style="color:var(--text-2);line-height:1.7;">{{ categories.description|default:"Sem descrição." }}</div>
     </div>
   </div>
 </div>
