@@ -1,43 +1,27 @@
-<div class="card mt-4">
-  <div class="card-body">
-    <div class="row">
+<div class="grid grid-4 mb-6">
 
-      <div class="col-md-3">
-        <div class="card bg-primary">
-          <div class="card-body">
-            <h5 class="card-title">Quantidade de vendas</h5>
-            <p class="card-text text-white font-weight-bold display-6">{{ sales_metrics.total_sales }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="card bg-danger">
-          <div class="card-body">
-            <h5 class="card-title">Produtos vendidos</h5>
-            <p class="card-text text-white font-weight-bold display-6">{{ sales_metrics.total_products_sold }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="card bg-success">
-          <div class="card-body">
-            <h5 class="card-title">Valor das vendas</h5>
-            <p class="card-text text-white font-weight-bold display-6">R$ {{ sales_metrics.total_sales_value}}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="card bg-warning">
-          <div class="card-body">
-            <h5 class="card-title">Lucro das Vendas</h5>
-            <p class="card-text text-white font-weight-bold display-6">R$ {{ sales_metrics.total_sales_profit }}</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
+  <div class="metric-card blue">
+    <div class="metric-icon blue"><i class="bi bi-receipt"></i></div>
+    <div class="metric-label">Quantidade de Vendas</div>
+    <div class="metric-value">{{ sales_metrics.total_sales }}</div>
   </div>
+
+  <div class="metric-card red">
+    <div class="metric-icon red"><i class="bi bi-bag-check"></i></div>
+    <div class="metric-label">Produtos Vendidos</div>
+    <div class="metric-value">{{ sales_metrics.total_products_sold }}</div>
+  </div>
+
+  <div class="metric-card green">
+    <div class="metric-icon green"><i class="bi bi-cash-stack"></i></div>
+    <div class="metric-label">Valor das Vendas</div>
+    <div class="metric-value" style="font-size:20px;">R$ {{ sales_metrics.total_sales_value }}</div>
+  </div>
+
+  <div class="metric-card amber">
+    <div class="metric-icon amber"><i class="bi bi-bar-chart-line"></i></div>
+    <div class="metric-label">Lucro das Vendas</div>
+    <div class="metric-value" style="font-size:20px;">R$ {{ sales_metrics.total_sales_profit }}</div>
+  </div>
+
 </div>

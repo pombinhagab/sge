@@ -1,18 +1,28 @@
 {% extends 'base.html' %}
+{% block title %}SGE — Detalhes da Saída{% endblock %}
+{% block page_title %}Saída de Estoque{% endblock %}
 
 {% block content %}
-
-<div class="container mt-4">
-  <h3 class="display-6">Detalhes da Saída</h3>
+<div style="max-width:560px;">
+  <div class="page-header">
+    <div>
+      <div class="page-title">{{ outflows.product }}</div>
+      <div class="page-subtitle">Detalhes da saída</div>
+    </div>
+    <a href="{% url 'outflow_list' %}" class="btn btn-ghost"><i class="bi bi-arrow-left"></i> Voltar</a>
+  </div>
 
   <div class="card">
-    <div class="card-body">
-      <h3 class="card-title">{{ outflows.product }}</h3>
-      <p class="cards-text">Quantidade: <strong>{{ outflows.quantity }}</strong></p>
-      <p class="cards-text">{{ outflows.description }}</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);">
+        <div class="metric-label">Quantidade</div>
+        <span class="badge badge-red">-{{ outflows.quantity }} unidades</span>
+      </div>
+      <div style="padding:16px 20px;grid-column:span 2;">
+        <div class="metric-label">Observação</div>
+        <div style="color:var(--text-2);">{{ outflows.description|default:"Sem observação." }}</div>
+      </div>
     </div>
   </div>
-  <a href="{% url 'outflow_list' %}" class="btn btn-secondary mt-3">Voltar para a lista de saídas</a>
 </div>
-
 {% endblock %}

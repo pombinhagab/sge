@@ -1,23 +1,73 @@
 {% extends 'base.html' %}
+{% block title %}SGE — {{ products.title }}{% endblock %}
+{% block page_title %}Detalhes do Produto{% endblock %}
 
 {% block content %}
-
-<div class="container mt-4">
-  <h3 class="display-6">Detalhes do Produto</h3>
-
-  <div class="card">
-    <div class="card-body">
-      <h3 class="card-title">{{ products.title }}</h3>
-      <p class="cards-text">Categoria: {{ products.category}}</p>
-      <p class="cards-text">Marca: {{ products.brand}}</p>
-      <p class="cards-text">{{ products.description }}</p>
-      <p class="cards-text">Número de série: <strong>{{ products.serie_number }}</strong></p>
-      <p class="cards-text">Preço de custo: <strong>R$ {{ products.cost_price }}</strong></p>
-      <p class="cards-text">Preço de Venda: <strong>R$ {{ products.selling_price }}</strong></p>
-      <p class="cards-text">Quantidade em estoque: <strong>{{ products.quantity }}</strong></p>
+<div style="max-width:640px;">
+  <div class="page-header">
+    <div>
+      <div class="page-title">{{ products.title }}</div>
+      <div class="page-subtitle">Informações completas do produto</div>
+    </div>
+    <div class="btn-group">
+      {% if perms.products.change_product %}
+      <a href="{% url 'product_update' products.id %}" class="btn btn-secondary">
+        <i class="bi bi-pencil"></i> Editar
+      </a>
+      {% endif %}
+      <a href="{% url 'product_list' %}" class="btn btn-ghost">
+        <i class="bi bi-arrow-left"></i> Voltar
+      </a>
     </div>
   </div>
-  <a href="{% url 'product_list' %}" class="btn btn-secondary mt-3">Voltar para a lista de produtos</a>
-</div>
 
+  <div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);">
+        <div class="metric-label">Categoria</div>
+        <div style="color:var(--text);font-weight:500;">{{ products.category }}</div>
+      </div>
+
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);">
+        <div class="metric-label">Marca</div>
+        <div style="color:var(--text);font-weight:500;">{{ products.brand }}</div>
+      </div>
+
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);">
+        <div class="metric-label">Preço de Custo</div>
+        <div class="font-mono" style="color:var(--text);font-weight:600;">R$ {{ products.cost_price }}</div>
+      </div>
+
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);">
+        <div class="metric-label">Preço de Venda</div>
+        <div class="font-mono" style="color:var(--green);font-weight:600;">R$ {{ products.selling_price }}</div>
+      </div>
+
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);">
+        <div class="metric-label">Número de Série</div>
+        <div class="font-mono" style="color:var(--text);">{{ products.serie_number }}</div>
+      </div>
+
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);">
+        <div class="metric-label">Quantidade em Estoque</div>
+        <div style="font-weight:600;">
+          {% if products.quantity == 0 %}
+            <span class="badge badge-red">{{ products.quantity }} unidades</span>
+          {% elif products.quantity <= 5 %}
+            <span class="badge badge-amber">{{ products.quantity }} unidades</span>
+          {% else %}
+            <span class="badge badge-green">{{ products.quantity }} unidades</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div style="padding:16px 20px;grid-column:span 2;">
+        <div class="metric-label">Descrição</div>
+        <div style="color:var(--text-2);line-height:1.7;">{{ products.description|default:"Sem descrição." }}</div>
+      </div>
+
+    </div>
+  </div>
+</div>
 {% endblock %}
