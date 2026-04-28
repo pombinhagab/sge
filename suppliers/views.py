@@ -1,3 +1,4 @@
+from app.utils.export import export_to_excel
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.db.models import ProtectedError
@@ -64,3 +65,18 @@ class SupplierDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
                 "Não é possível excluir essa marca pois existem produtos vinculados a ela."
             )
             return redirect('category_detail', pk=self.object.pk)
+
+def export_suppliers_xlsx(request):
+    suppliers = models.Supplier.objects.all()
+
+    headers = ['ID', 'Nome','Descrição' ,'Criado em']
+
+    def get_row(supplier):
+        return [
+            supplier.id,
+            supplier.name,
+            supplier.description,
+            supplier.created_at.strftime('%d/%m/%Y %H:%M')
+        ]
+    
+    return export_to_excel(suppliers, headers, get_row, "suppliers.xlsx")

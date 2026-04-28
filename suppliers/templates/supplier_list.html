@@ -7,6 +7,7 @@
   <div class="table-toolbar">
     <span class="table-toolbar-title">Fornecedores</span>
     <div class="table-toolbar-spacer"></div>
+    <a href="{% url 'export_suppliers' %}" class="btn btn-success"><i class="bi bi-file-earmark-excel"></i> Exportar Excel</a>
     {% if perms.suppliers.add_supplier %}
     <a href="{% url 'supplier_create' %}" class="btn btn-primary">
       <i class="bi bi-plus"></i> Novo(a) Fornecedor
