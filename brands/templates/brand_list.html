@@ -6,52 +6,47 @@
 <div class="table-wrap">
   <div class="table-toolbar">
     <span class="table-toolbar-title">Marcas</span>
+    <form method="get" action="{% url 'brand_list' %}" style="display:flex;gap:8px;">
+      <input type="text" class="form-control" name="name" placeholder="Buscar por nome…" value="{{ request.GET.name }}" style="width:240px;">
+      <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+    </form>
     <div class="table-toolbar-spacer"></div>
+    <a href="{% url 'export_brands' %}" class="btn btn-success"><i class="bi bi-file-earmark-excel"></i> Exportar Excel</a>
     {% if perms.brands.add_brand %}
-    <a href="{% url 'brand_create' %}" class="btn btn-primary">
-      <i class="bi bi-plus"></i> Novo(a) Marca
-    </a>
+    <a href="{% url 'brand_create' %}" class="btn btn-primary"><i class="bi bi-plus"></i> Nova Marca</a>
     {% endif %}
   </div>
-
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Nome</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in brands %}
-      <tr>
-        <td class="text-muted text-xs font-mono">{{ item.id }}</td>
-        <td style="font-weight:500;">{{ item.name }}</td>
-        <td>
-          <div class="btn-group">
-            {% if perms.brands.view_brand %}
-            <a href="{% url 'brand_detail' item.id %}" class="btn btn-ghost btn-icon" title="Ver"><i class="bi bi-eye"></i></a>
-            {% endif %}
-            {% if perms.brands.change_brand %}
-            <a href="{% url 'brand_update' item.id %}" class="btn btn-ghost btn-icon" title="Editar"><i class="bi bi-pencil"></i></a>
-            {% endif %}
-            {% if perms.brands.delete_brand %}
-            <a href="{% url 'brand_delete' item.id %}" class="btn btn-danger btn-icon" title="Excluir"><i class="bi bi-trash"></i></a>
-            {% endif %}
-          </div>
-        </td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="3" style="text-align:center;padding:40px;color:var(--text-2);">
-          <i class="bi-shop" style="font-size:28px;display:block;margin-bottom:8px;"></i>
-          Nenhum(a) Marca cadastrado(a).
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Nome</th><th>Descrição</th><th>Ações</th></tr>
+      </thead>
+      <tbody>
+        {% for brand in brands %}
+        <tr>
+          <td class="text-muted text-xs font-mono">{{ brand.id }}</td>
+          <td style="font-weight:500;">{{ brand.name }}</td>
+          <td class="text-muted">{{ brand.description|truncatechars:60|default:"—" }}</td>
+          <td>
+            <div class="btn-group">
+              {% if perms.brands.view_brand %}
+              <a href="{% url 'brand_detail' brand.id %}" class="btn btn-ghost btn-icon" title="Ver"><i class="bi bi-eye"></i></a>
+              {% endif %}
+              {% if perms.brands.change_brand %}
+              <a href="{% url 'brand_update' brand.id %}" class="btn btn-ghost btn-icon" title="Editar"><i class="bi bi-pencil"></i></a>
+              {% endif %}
+              {% if perms.brands.delete_brand %}
+              <a href="{% url 'brand_delete' brand.id %}" class="btn btn-danger btn-icon" title="Excluir"><i class="bi bi-trash"></i></a>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-2);"><i class="bi bi-shop" style="font-size:28px;display:block;margin-bottom:8px;"></i>Nenhuma marca cadastrada.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
   {% include 'components/_pagination.html' %}
 </div>
 {% endblock %}
