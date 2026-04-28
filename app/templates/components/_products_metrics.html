@@ -1,43 +1,27 @@
-<div class="card mt-4">
-  <div class="card-body">
-    <div class="row">
+<div class="grid grid-4 mb-6">
 
-      <div class="col-md-3">
-        <div class="card bg-primary">
-          <div class="card-body">
-            <h5 class="card-title">Quantidade de Produtos</h5>
-            <p class="card-text text-white font-weight-bold display-6">{{ product_metrics.total_quantity }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="card bg-danger">
-          <div class="card-body">
-            <h5 class="card-title">Custo de Estoque</h5>
-            <p class="card-text text-white font-weight-bold display-6">R$ {{ product_metrics.total_cost_price }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="card bg-success">
-          <div class="card-body">
-            <h5 class="card-title">Valor do Estoque</h5>
-            <p class="card-text text-white font-weight-bold display-6">R$ {{ product_metrics.total_selling_price }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="card bg-warning">
-          <div class="card-body">
-            <h5 class="card-title">Lucro do Estoque</h5>
-            <p class="card-text text-white font-weight-bold display-6">R$ {{ product_metrics.total_profit }}</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
+  <div class="metric-card blue">
+    <div class="metric-icon blue"><i class="bi bi-box-seam"></i></div>
+    <div class="metric-label">Quantidade em Estoque</div>
+    <div class="metric-value">{{ product_metrics.total_quantity }}</div>
   </div>
+
+  <div class="metric-card red">
+    <div class="metric-icon red"><i class="bi bi-currency-dollar"></i></div>
+    <div class="metric-label">Custo do Estoque</div>
+    <div class="metric-value" style="font-size:20px;">R$ {{ product_metrics.total_cost_price }}</div>
+  </div>
+
+  <div class="metric-card green">
+    <div class="metric-icon green"><i class="bi bi-graph-up-arrow"></i></div>
+    <div class="metric-label">Valor do Estoque</div>
+    <div class="metric-value" style="font-size:20px;">R$ {{ product_metrics.total_selling_price }}</div>
+  </div>
+
+  <div class="metric-card amber">
+    <div class="metric-icon amber"><i class="bi bi-lightning-charge"></i></div>
+    <div class="metric-label">Lucro do Estoque</div>
+    <div class="metric-value" style="font-size:20px;">R$ {{ product_metrics.total_profit }}</div>
+  </div>
+
 </div>
