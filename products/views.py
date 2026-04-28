@@ -1,3 +1,4 @@
+from app.utils.export import export_to_excel
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
@@ -72,3 +73,24 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
     success_url = reverse_lazy('product_list')
     context_object_name = 'products'
     permission_required = 'products.delete_product'
+
+
+def export_products_xlsx(request):
+    products = models.Product.objects.select_related('category', 'brand').all()
+
+    headers = ['ID', 'Título', 'Categoria', 'Marca', 'Número de série','Preço de custo', 'Preço de venda', 'Quantidade', 'Criado em']
+
+    def get_row(product):
+        return [
+            product.id,
+            product.title,
+            product.category.name if product.category else "",
+            product.brand.name if product.brand else "",
+            product.serie_number or "",
+            product.cost_price,
+            product.selling_price,
+            product.quantity,
+            product.created_at.strftime('%d/%m/%Y %H:%M')
+        ]
+
+    return export_to_excel(products, headers, get_row, "products.xlsx")
