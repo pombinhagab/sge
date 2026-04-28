@@ -1,4 +1,5 @@
 import json
+from app.utils.export import export_to_excel
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from . import metrics
@@ -23,3 +24,4 @@ def home(request):
     }
 
     return render(request, 'home.html', context)
+

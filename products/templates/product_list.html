@@ -36,7 +36,7 @@
     </form>
 
     <div class="table-toolbar-spacer"></div>
-
+    <a href="{% url 'export_products' %}" class="btn btn-success"><i class="bi bi-file-earmark-excel"></i> Exportar Excel</a>
     {% if perms.products.add_product %}
     <a href="{% url 'product_create' %}" class="btn btn-primary">
       <i class="bi bi-plus"></i> Novo Produto

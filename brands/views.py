@@ -1,3 +1,4 @@
+from app.utils.export import export_to_excel
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.db.models import ProtectedError
@@ -64,3 +65,18 @@ class BrandDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
                 "Não é possível excluir essa marca pois existem produtos vinculados a ela."
             )
             return redirect('brand_detail', pk=self.object.pk)
+
+def export_brands_xlsx(request):
+    brands = models.Brand.objects.all()
+
+    headers = ['ID', 'Nome', 'Descrição', 'Criado em']
+
+    def get_row(brand):
+        return [
+            brand.id,
+            brand.name,
+            brand.description or '',
+            brand.created_at.strftime('%d/%m/%Y %H:%M')
+        ]
+    
+    return export_to_excel(brands, headers, get_row, "brands.xlsx")
