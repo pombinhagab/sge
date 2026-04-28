@@ -1,3 +1,4 @@
+from app.utils.export import export_to_excel
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView
@@ -40,3 +41,19 @@ class OutflowDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView)
     template_name = 'outflow_detail.html'
     context_object_name = 'outflows'
     permission_required = 'outflows.view_outflow'
+
+
+def export_outflows_xlsx(request):
+    outflows = models.Outflow.objects.select_related( 'product').all()
+
+    headers = ['ID', 'Produto', 'Quantidade','Criado em']
+
+    def get_row(outflow):
+        return [
+            outflow.id,
+            outflow.product.title if outflow.product else '',
+            outflow.quantity,
+            outflow.created_at.strftime('%d/%m/%Y %H:%M')
+        ]
+    
+    return export_to_excel(outflows, headers, get_row, "outflows.xlsx")
