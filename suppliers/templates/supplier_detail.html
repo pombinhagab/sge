@@ -1,17 +1,30 @@
 {% extends 'base.html' %}
+{% block title %}SGE — Detalhes da Fornecedor{% endblock %}
+{% block page_title %}Fornecedores{% endblock %}
 
 {% block content %}
-
-<div class="container mt-4">
-  <h3 class="display-6">Detalhes do Fornecedor</h3>
-
-  <div class="card">
-    <div class="card-body">
-      <h3 class="card-title">{{ suppliers.name }}</h3>
-      <p clas="cards-text">{{ suppliers.description }}</p>
+<div style="max-width:480px;">
+  <div class="page-header">
+    <div>
+      <div class="page-title">{{ suppliers.name }}</div>
+      <div class="page-subtitle">Detalhes da Fornecedor</div>
+    </div>
+    <div class="btn-group">
+      {% if perms.suppliers.change_supplier %}
+      <a href="{% url 'supplier_update' suppliers.id %}" class="btn btn-secondary"><i class="bi bi-pencil"></i> Editar</a>
+      {% endif %}
+      <a href="{% url 'supplier_list' %}" class="btn btn-ghost"><i class="bi bi-arrow-left"></i> Voltar</a>
     </div>
   </div>
-  <a href="{% url 'supplier_list' %}" class="btn btn-secondary mt-3">Voltar para a lista de fornecedores</a>
+  <div class="card">
+    <div style="padding:16px 20px;">
+      <div class="metric-label">Nome</div>
+      <div style="color:var(--text);font-weight:500;font-size:16px;">{{ suppliers.name }}</div>
+    </div>
+    <div style="padding:16px 20px;">
+      <div class="metric-label">Descrição</div>
+      <div style="color:var(--text-2);line-height:1.7;">{{ categories.description|default:"Sem descrição." }}</div>
+    </div>
+  </div>
 </div>
-
 {% endblock %}

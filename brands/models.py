@@ -1,3 +1,4 @@
+from app.utils.export import export_to_excel
 from django.db import models
 
 

@@ -1,20 +1,30 @@
 {% extends 'base.html' %}
+{% block title %}SGE — Cadastrar Marca{% endblock %}
+{% block page_title %}Cadastrar Marca{% endblock %}
 
 {% block content %}
-
-<div class="container mt-4">
-  <h3 class="display-6">Cadastrar Marca</h3>
-
-  <div class="card">
-    <div class="card-body">
-      <form method="post" class="form">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Salvar</button>
-      </form>
+<div style="max-width:480px;">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Cadastrar Marca</div>
     </div>
   </div>
-  <a href="{% url 'brand_list' %}" class="btn btn-secondary mt-3">Cancelar e voltar para a lista de marcas</a>
+  <div class="card">
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="form-group">
+        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}"
+               class="form-control" value="{{ field.value|default:'' }}" {% if field.field.required %}required{% endif %}>
+        {% for error in field.errors %}<div style="font-size:12px;color:var(--red);margin-top:4px;">{{ error }}</div>{% endfor %}
+      </div>
+      {% endfor %}
+      <div class="btn-group" style="margin-top:8px;">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-check2"></i> Salvar</button>
+        <a href="{% url 'brand_list' %}" class="btn btn-secondary"><i class="bi bi-x"></i> Cancelar</a>
+      </div>
+    </form>
+  </div>
 </div>
-
 {% endblock %}

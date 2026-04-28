@@ -1,22 +1,39 @@
 {% extends 'base.html' %}
+{% block title %}SGE — Excluir Produto{% endblock %}
+{% block page_title %}Excluir Produto{% endblock %}
 
 {% block content %}
-
-<div class="container mt-4">
-  <h3 class="display 6">Deletar Produto</h3>
-
-  <div class="card">
-    <div class="card-body">
-      <p class="card-text">Tem certeza que deseja excluir o produto <strong>{{ products.title }}</strong>?</p>
-
-      <form method="post">
-
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger mt-3">Deletar produto</button>
-      </form>
+<div style="max-width:480px;">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Excluir Produto</div>
+      <div class="page-subtitle">Esta ação não pode ser desfeita</div>
     </div>
   </div>
-  <a href="{% url 'product_list' %}" class="btn btn-secondary mt-3">Cancelar e voltar para a lista de produtos</a>
-</div>
 
+  <div class="danger-zone" style="margin-bottom:16px;">
+    <div style="display:flex;gap:12px;align-items:flex-start;">
+      <i class="bi bi-exclamation-triangle-fill" style="color:var(--red);font-size:20px;margin-top:2px;flex-shrink:0;"></i>
+      <div>
+        <div style="font-weight:600;color:var(--text);margin-bottom:4px;">Confirmar exclusão</div>
+        <div style="color:var(--text-2);font-size:13.5px;">
+          Você está prestes a excluir o produto <strong style="color:var(--text);">{{ products.title }}</strong>.
+          Todos os dados associados serão removidos permanentemente.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <form method="post" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger" style="background:var(--red);color:#fff;border-color:var(--red);">
+        <i class="bi bi-trash"></i> Sim, excluir
+      </button>
+    </form>
+    <a href="{% url 'product_list' %}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Cancelar
+    </a>
+  </div>
+</div>
 {% endblock %}

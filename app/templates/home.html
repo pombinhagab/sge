@@ -1,155 +1,152 @@
 {% extends 'base.html' %}
-
-{% block title %}
-SGE - Home
-{% endblock %}
+{% block title %}SGE — Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
 
 {% block content %}
 
-  {% if perms.products.view_product and perms.inflows.view_inflow %}
-    {% include 'components/_products_metrics.html' %}
-  {% endif %}
+{% if perms.products.view_product and perms.inflows.view_inflow %}
+  {% include 'components/_products_metrics.html' %}
+{% endif %}
 
-  {% if perms.outflows.view_outflow %}
-    {% include 'components/_sales_metrics.html' %}
-  {% endif %}
+{% if perms.outflows.view_outflow %}
+  {% include 'components/_sales_metrics.html' %}
+{% endif %}
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  {% if perms.outflows.view_outflow %}
-    <div class="row mt-4 justify-center">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-      <div class="col-md-6 text-center">
-        <h5 class="text-center mb-3">Valor de vendas (Ùltimos 7 dias)</h5>
-        <canvas id="dailySalesChart"></canvas>
-      </div>
+{% if perms.outflows.view_outflow %}
+<div class="grid grid-2 mb-6">
 
-      <div class="col-md-6 text-center">
-        <h5 class="text-center mb-3">Quantidade de vendas diárias</h5>
-        <canvas id="dailySalesQuantityChart"></canvas>
-      </div>
+  <div class="chart-card">
+    <div class="chart-title">Valor de Vendas</div>
+    <div class="chart-subtitle">Últimos 7 dias</div>
+    <canvas id="dailySalesChart" height="200"></canvas>
+  </div>
 
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          var dailySalesData = JSON.parse('{{ daily_sales_data | safe }}');
-          var dailySalesQuantityData = JSON.parse('{{ daily_sales_quantity_data | safe }}');
+  <div class="chart-card">
+    <div class="chart-title">Quantidade de Vendas Diárias</div>
+    <div class="chart-subtitle">Últimos 7 dias</div>
+    <canvas id="dailySalesQuantityChart" height="200"></canvas>
+  </div>
 
-          var ctxDailySales = document.getElementById('dailySalesChart').getContext('2d');
-          var dailySalesChart = new Chart (ctxDailySales, {
-            type: 'line',
-            data: {
-              labels: dailySalesData.dates,
-              datasets: [{
-                label: 'Valor em Vendas',
-                data: dailySalesData.values,
-                fill: false,
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 2,
-                tension: 0.5
-              }]
-            },
-            options: {
-              scales: {
-                y: {
-                  beginAtZero: true
-                }
-              }
-            }
-          });
+</div>
 
-          var ctxDailySalesQuantity = document.getElementById('dailySalesQuantityChart').getContext('2d');
-          var dailySalesQuantityChart = new Chart(ctxDailySalesQuantity, {
-            type: 'bar',
-            data: {
-              labels: dailySalesQuantityData.dates,
-              datasets: [{
-                label: 'Quantidade de Vendas',
-                data: dailySalesQuantityData.values,
-                backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-              }]
-            },
-            options: {
-              scales: {
-                y: {
-                  beginAtZero: true
-                }
-              }
-            }
-          });
-          
-        });
-      </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const accent = '#4f7cff';
+  const red    = '#ef4444';
+  const gridColor = 'rgba(42,49,71,.6)';
+  const textColor = '#8b92a8';
 
+  Chart.defaults.color = textColor;
+  Chart.defaults.borderColor = gridColor;
+  Chart.defaults.font.family = "'DM Sans', sans-serif";
+  Chart.defaults.font.size = 12;
 
+  var dailySalesData         = JSON.parse('{{ daily_sales_data | safe }}');
+  var dailySalesQuantityData = JSON.parse('{{ daily_sales_quantity_data | safe }}');
+
+  new Chart(document.getElementById('dailySalesChart'), {
+    type: 'line',
+    data: {
+      labels: dailySalesData.dates,
+      datasets: [{
+        label: 'Valor em Vendas',
+        data: dailySalesData.values,
+        fill: true,
+        backgroundColor: 'rgba(79,124,255,.10)',
+        borderColor: accent,
+        borderWidth: 2,
+        tension: 0.4,
+        pointBackgroundColor: accent,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, grid: { color: gridColor } }, x: { grid: { display: false } } }
+    }
+  });
+
+  new Chart(document.getElementById('dailySalesQuantityChart'), {
+    type: 'bar',
+    data: {
+      labels: dailySalesQuantityData.dates,
+      datasets: [{
+        label: 'Qtd. de Vendas',
+        data: dailySalesQuantityData.values,
+        backgroundColor: 'rgba(79,124,255,.25)',
+        borderColor: accent,
+        borderWidth: 1.5,
+        borderRadius: 5,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, grid: { color: gridColor } }, x: { grid: { display: false } } }
+    }
+  });
+});
+</script>
+{% endif %}
+
+{% if perms.products.view_product %}
+<div class="grid grid-2">
+
+  <div class="chart-card">
+    <div class="chart-title">Produtos por Categoria</div>
+    <div class="chart-subtitle">Distribuição atual</div>
+    <div style="max-width:300px;margin:0 auto;">
+      <canvas id="productByCategoryChart"></canvas>
     </div>
-  {% endif %}
+  </div>
 
-  {% if perms.products.view_product %}
-    <div class="row mt-4 justify-center">
-
-      <div class="col-md-6 text-center">
-        <h5 class="mb-3">Produtos por Categoria</h5>
-        <div class="mb-4"></div>
-        <div class="embed-responsive embed-responsive-1by1" style="width: 400px; display: inline-block;">
-          <canvas id="productByCategoryChart" class="embed-responsive-item"></canvas>
-        </div>
-      </div>
-
-      <div class="col-md-6 text-center">
-        <h5 class="mb-3">Produtos por Marca</h5>
-        <div class="mb-4"></div>
-        <div style="width: 400px; display: inline-block;">
-          <canvas id="productByBrandChart" class="embed-responsive-item"></canvas>
-        </div>
-      </div>
-
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {  
-          var productCountByCategory = JSON.parse('{{ product_count_by_category|safe }}');
-          var productCountByBrand = JSON.parse('{{ product_count_by_brand|safe }}');
-
-          var ctxCategory = document.getElementById('productByCategoryChart').getContext('2d');
-          var productByCategoryChart = new Chart(ctxCategory, {
-            type: 'doughnut',
-            data: {
-              labels: Object.keys(productCountByCategory),
-              datasets: [{
-                data: Object.values(productCountByCategory),
-                borderWidth: 1
-              }]
-            },
-            options: {
-              plugins: {
-                legend: {
-                  display: false
-                },
-              }
-            }
-          });
-
-          var ctxBrand = document.getElementById('productByBrandChart').getContext('2d');
-          var productByBrandChart = new Chart(ctxBrand, {
-            type: 'doughnut',
-            data: {
-              labels: Object.keys(productCountByBrand),
-              datasets: [{
-                data: Object.values(productCountByBrand),
-                borderWidth: 1
-              }]
-            },
-            options: {
-              plugins: {
-                legend: {
-                  display: false
-                },
-              }
-            }
-          });
-        });
-      </script>
-
+  <div class="chart-card">
+    <div class="chart-title">Produtos por Marca</div>
+    <div class="chart-subtitle">Distribuição atual</div>
+    <div style="max-width:300px;margin:0 auto;">
+      <canvas id="productByBrandChart"></canvas>
     </div>
-  {% endif %}
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const palette = ['#4f7cff','#22c55e','#f59e0b','#ef4444','#a78bfa','#38bdf8','#fb923c','#34d399'];
+    var productCountByCategory = JSON.parse('{{ product_count_by_category|safe }}');
+    var productCountByBrand    = JSON.parse('{{ product_count_by_brand|safe }}');
+
+    const doughnutOpts = {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { padding: 16, color: '#8b92a8' } }
+      },
+      cutout: '65%',
+    };
+
+    new Chart(document.getElementById('productByCategoryChart'), {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(productCountByCategory),
+        datasets: [{ data: Object.values(productCountByCategory), backgroundColor: palette, borderWidth: 0 }]
+      },
+      options: doughnutOpts
+    });
+
+    new Chart(document.getElementById('productByBrandChart'), {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(productCountByBrand),
+        datasets: [{ data: Object.values(productCountByBrand), backgroundColor: palette, borderWidth: 0 }]
+      },
+      options: doughnutOpts
+    });
+  });
+  </script>
+
+</div>
+{% endif %}
 
 {% endblock %}
