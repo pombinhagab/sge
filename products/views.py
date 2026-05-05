@@ -1,8 +1,17 @@
-from app.utils.export import export_to_excel
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
-from . import models, forms
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
+
+from rest_framework import generics
+
+from app.utils.export import export_to_excel
+from . import forms, models, serializers
 from app import metrics
 from brands.models import Brand
 from categories.models import Category
@@ -94,3 +103,13 @@ def export_products_xlsx(request):
         ]
 
     return export_to_excel(products, headers, get_row, "products.xlsx")
+
+
+class ProductCreateListAPIView(generics.ListCreateAPIView):
+    queryset = models.Product.objects.all()
+    serializer_class = serializers.ProductSerializer
+
+
+class ProductRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Product.objects.all()
+    serializer_class = serializers.ProductSerializer

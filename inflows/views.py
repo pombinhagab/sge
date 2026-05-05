@@ -1,8 +1,15 @@
-from app.utils.export import export_to_excel
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView
-from . import models, forms
+from django.views.generic import (
+    CreateView,
+    DetailView,
+    ListView,
+)
+
+from rest_framework import generics
+
+from app.utils.export import export_to_excel
+from . import forms, models, serializers
 
 
 class InflowListView(LoginRequiredMixin,  PermissionRequiredMixin, ListView):
@@ -52,3 +59,13 @@ def export_inflows_xlsx(request):
         ]
     
     return export_to_excel(inflows, headers, get_row, "inflows.xlsx")
+
+
+class InflowCreateListAPIView(generics.ListCreateAPIView):
+    queryset = models.Inflow.objects.all()
+    serializer_class = serializers.InflowSerializer
+
+
+class InflowRetrieveAPIView(generics.RetrieveAPIView):
+    queryset = models.Inflow.objects.all()
+    serializer_class = serializers.InflowSerializer

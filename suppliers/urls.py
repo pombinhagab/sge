@@ -9,5 +9,8 @@ urlpatterns = [
     path('suppliers/<int:pk>/update/', views.SupplierUpdateView.as_view(), name='supplier_update'),
     path('suppliers/<int:pk>/delete/', views.SupplierDeleteView.as_view(), name='supplier_delete'),
 
-    path('suppliers/export/', views.export_suppliers_xlsx, name='export_suppliers')
+    path('suppliers/export/', views.export_suppliers_xlsx, name='export_suppliers'),
+
+    path('api/v1/supplier/', views.SupplierCreateListAPIView.as_view(), name='supplier-create-list-api-view'),
+    path('api/v1/supplier/<int:pk>/', views.SupplierRetrieveUpdateDestroyAPIView.as_view(), name='supplier-update-destroy')
 ]
