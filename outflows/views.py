@@ -28,7 +28,7 @@ class OutflowListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             queryset = queryset.filter(product__title__icontains=product)
 
         return queryset
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['sales_metrics'] = metrics.get_sales_metrics()
@@ -51,9 +51,9 @@ class OutflowDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView)
 
 
 def export_outflows_xlsx(request):
-    outflows = models.Outflow.objects.select_related( 'product').all()
+    outflows = models.Outflow.objects.select_related('product').all()
 
-    headers = ['ID', 'Produto', 'Quantidade','Criado em']
+    headers = ['ID', 'Produto', 'Quantidade', 'Criado em']
 
     def get_row(outflow):
         return [
@@ -62,7 +62,7 @@ def export_outflows_xlsx(request):
             outflow.quantity,
             outflow.created_at.strftime('%d/%m/%Y %H:%M')
         ]
-    
+
     return export_to_excel(outflows, headers, get_row, "outflows.xlsx")
 
 

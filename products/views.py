@@ -33,10 +33,10 @@ class ProductListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if title:
             queryset = queryset.filter(title__icontains=title)
-        
+
         if serie_number:
             queryset = queryset.filter(serie_number__icontains=serie_number)
-        
+
         if category:
             queryset = queryset.filter(category__id=category)
 
@@ -44,7 +44,7 @@ class ProductListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             queryset = queryset.filter(brand__id=brand)
 
         return queryset
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['product_metrics'] = metrics.get_product_metrics()
@@ -87,7 +87,7 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
 def export_products_xlsx(request):
     products = models.Product.objects.select_related('category', 'brand').all()
 
-    headers = ['ID', 'Título', 'Categoria', 'Marca', 'Número de série','Preço de custo', 'Preço de venda', 'Quantidade', 'Criado em']
+    headers = ['ID', 'Título', 'Categoria', 'Marca', 'Número de série', 'Preço de custo', 'Preço de venda', 'Quantidade', 'Criado em']
 
     def get_row(product):
         return [

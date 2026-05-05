@@ -7,7 +7,7 @@ from suppliers.serializers import SupplierSerializer
 class InflowSerializer(serializers.ModelSerializer):
 
     supplier = SupplierSerializer()
-    product =  ProductSerializer()
+    product = ProductSerializer()
 
     class Meta:
         model = Inflow

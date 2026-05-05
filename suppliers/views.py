@@ -75,10 +75,11 @@ class SupplierDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
             )
             return redirect('supplier_detail', pk=self.object.pk)
 
+
 def export_suppliers_xlsx(request):
     suppliers = models.Supplier.objects.all()
 
-    headers = ['ID', 'Nome','Descrição' ,'Criado em']
+    headers = ['ID', 'Nome', 'Descrição', 'Criado em']
 
     def get_row(supplier):
         return [
@@ -87,7 +88,7 @@ def export_suppliers_xlsx(request):
             supplier.description,
             supplier.created_at.strftime('%d/%m/%Y %H:%M')
         ]
-    
+
     return export_to_excel(suppliers, headers, get_row, "suppliers.xlsx")
 
 

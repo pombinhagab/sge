@@ -16,12 +16,13 @@ from rest_framework import generics
 from app.utils.export import export_to_excel
 from . import forms, models, serializers
 
+
 class BrandListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = models.Brand
     template_name = 'brand_list.html'
     context_object_name = 'brands'
     paginate_by = 10
-    permission_required = 'brands.view_brand' # nome da app.permissao_model
+    permission_required = 'brands.view_brand'  # nome da app.permissao_model
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -74,6 +75,7 @@ class BrandDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
             )
             return redirect('brand_detail', pk=self.object.pk)
 
+
 def export_brands_xlsx(request):
     brands = models.Brand.objects.all()
 
@@ -86,7 +88,7 @@ def export_brands_xlsx(request):
             brand.description or '',
             brand.created_at.strftime('%d/%m/%Y %H:%M')
         ]
-    
+
     return export_to_excel(brands, headers, get_row, "brands.xlsx")
 
 

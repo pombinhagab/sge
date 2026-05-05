@@ -17,7 +17,7 @@ from app.utils.export import export_to_excel
 from . import forms, models, serializers
 
 
-class CategoryListView(LoginRequiredMixin, PermissionRequiredMixin,ListView):
+class CategoryListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = models.Category
     template_name = 'category_list.html'
     context_object_name = 'categories'
@@ -64,7 +64,6 @@ class CategoryDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
     context_object_name = 'categories'
     permission_required = 'categories.delete_category'
 
-
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         try:
@@ -75,6 +74,7 @@ class CategoryDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
                 "Não é possível excluir essa marca pois existem produtos vinculados a ela."
             )
             return redirect('category_detail', pk=self.object.pk)
+
 
 def export_categories_xlsx(request):
     categories = models.Category.objects.all()
@@ -88,7 +88,7 @@ def export_categories_xlsx(request):
             category.description or '',
             category.created_at.strftime('%d/%m/%Y %H:%M')
         ]
-    
+
     return export_to_excel(categories, headers, get_row, "categories.xlsx")
 
 
