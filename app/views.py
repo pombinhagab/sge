@@ -1,5 +1,4 @@
 import json
-from app.utils.export import export_to_excel
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from . import metrics
@@ -15,8 +14,8 @@ def home(request):
     graphic_product_brand_metric = metrics.get_graphic_product_brand_metric()
 
     context = {
-        'product_metrics' : product_metrics,
-        'sales_metrics' : sales_metrics,
+        'product_metrics': product_metrics,
+        'sales_metrics': sales_metrics,
         'daily_sales_data': json.dumps(daily_sales_data),
         'daily_sales_quantity_data': json.dumps(daily_sales_quantity_data),
         'product_count_by_category': json.dumps(graphic_product_category_metric),
@@ -24,4 +23,3 @@ def home(request):
     }
 
     return render(request, 'home.html', context)
-

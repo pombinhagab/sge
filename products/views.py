@@ -1,8 +1,17 @@
-from app.utils.export import export_to_excel
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
-from . import models, forms
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
+
+from rest_framework import generics
+
+from app.utils.export import export_to_excel
+from . import forms, models, serializers
 from app import metrics
 from brands.models import Brand
 from categories.models import Category
@@ -24,10 +33,10 @@ class ProductListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         if title:
             queryset = queryset.filter(title__icontains=title)
-        
+
         if serie_number:
             queryset = queryset.filter(serie_number__icontains=serie_number)
-        
+
         if category:
             queryset = queryset.filter(category__id=category)
 
@@ -35,7 +44,7 @@ class ProductListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             queryset = queryset.filter(brand__id=brand)
 
         return queryset
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['product_metrics'] = metrics.get_product_metrics()
@@ -78,7 +87,7 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
 def export_products_xlsx(request):
     products = models.Product.objects.select_related('category', 'brand').all()
 
-    headers = ['ID', 'Título', 'Categoria', 'Marca', 'Número de série','Preço de custo', 'Preço de venda', 'Quantidade', 'Criado em']
+    headers = ['ID', 'Título', 'Categoria', 'Marca', 'Número de série', 'Preço de custo', 'Preço de venda', 'Quantidade', 'Criado em']
 
     def get_row(product):
         return [
@@ -94,3 +103,13 @@ def export_products_xlsx(request):
         ]
 
     return export_to_excel(products, headers, get_row, "products.xlsx")
+
+
+class ProductCreateListAPIView(generics.ListCreateAPIView):
+    queryset = models.Product.objects.all()
+    serializer_class = serializers.ProductSerializer
+
+
+class ProductRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Product.objects.all()
+    serializer_class = serializers.ProductSerializer

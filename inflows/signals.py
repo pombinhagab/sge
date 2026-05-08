@@ -4,7 +4,7 @@ from inflows.models import Inflow
 
 
 @receiver(post_save, sender=Inflow)
-def update_product_quantity(sender, instance, created,** kwargs):
+def update_product_quantity(sender, instance, created, ** kwargs):
     if created:
         if instance.quantity > 0:
             product = instance.product
