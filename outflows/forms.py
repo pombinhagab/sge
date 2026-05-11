@@ -27,5 +27,5 @@ class OutflowForm(forms.ModelForm):
             raise ValidationError(
                 f'A quantidade disponível em estoque para o produto {product.title} é de {product.quantity} unidades.'
             )
-        
-        return quantity   
+
+        return quantity

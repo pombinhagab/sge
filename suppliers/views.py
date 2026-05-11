@@ -1,11 +1,20 @@
-from app.utils.export import export_to_excel
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.urls import reverse_lazy
-from django.db.models import ProtectedError
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db.models import ProtectedError
 from django.shortcuts import redirect
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
-from . import models, forms
+from django.urls import reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
+
+from rest_framework import generics
+
+from app.utils.export import export_to_excel
+from . import forms, models, serializers
 
 
 class SupplierListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -64,12 +73,13 @@ class SupplierDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
                 request,
                 "Não é possível excluir essa marca pois existem produtos vinculados a ela."
             )
-            return redirect('category_detail', pk=self.object.pk)
+            return redirect('supplier_detail', pk=self.object.pk)
+
 
 def export_suppliers_xlsx(request):
     suppliers = models.Supplier.objects.all()
 
-    headers = ['ID', 'Nome','Descrição' ,'Criado em']
+    headers = ['ID', 'Nome', 'Descrição', 'Criado em']
 
     def get_row(supplier):
         return [
@@ -78,5 +88,15 @@ def export_suppliers_xlsx(request):
             supplier.description,
             supplier.created_at.strftime('%d/%m/%Y %H:%M')
         ]
-    
+
     return export_to_excel(suppliers, headers, get_row, "suppliers.xlsx")
+
+
+class SupplierCreateListAPIView(generics.ListCreateAPIView):
+    queryset = models.Supplier.objects.all()
+    serializer_class = serializers.SupplierSerializer
+
+
+class SupplierRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Supplier.objects.all()
+    serializer_class = serializers.SupplierSerializer
