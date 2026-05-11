@@ -1,14 +1,14 @@
-# Stock Management System (SGE) Technical Documentation
+# Documentação Técnica do Sistema de Gestão de Estoque (SGE)
 
-## 1. Introduction
+## 1. Introdução
 
-The Stock Management System (SGE) is a web application developed using Django and Django REST Framework, designed to manage products, suppliers, categories, brands, stock inflows, and outflows. The application offers an administrative interface, RESTful API functionalities, and a dashboard with stock and sales metrics.
+O Sistema de Gestão de Estoque (SGE) é uma aplicação web desenvolvida em Django e Django REST Framework, projetada para gerenciar produtos, fornecedores, categorias, marcas, entradas e saídas de estoque. A aplicação oferece uma interface administrativa, funcionalidades de API RESTful e um dashboard com métricas de estoque e vendas.
 
-## 2. Technologies Used
+## 2. Tecnologias Utilizadas
 
-The SGE application is built with the following technologies:
+A aplicação SGE é construída com as seguintes tecnologias:
 
-| Technology | Version |
+| Tecnologia | Versão |
 |---|---|
 | Python | 3.13.2 |
 | Django | 6.0.4 |
@@ -21,137 +21,137 @@ The SGE application is built with the following technologies:
 | psycopg2-binary | 2.9.12 |
 | python-dotenv | 1.2.2 |
 
-## 3. Project Structure
+## 3. Estrutura do Projeto
 
-The project structure follows the standard Django application pattern, with modules (`apps`) dedicated to specific functionalities. Below is an overview of the main directories and files:
+A estrutura do projeto segue o padrão de aplicações Django, com módulos (`apps`) dedicados a funcionalidades específicas. A seguir, uma visão geral dos principais diretórios e arquivos:
 
 ```
 /sge
-├── app/                  # Global settings, main URLs, views, and dashboard metrics
-├── authentication/       # JWT authentication module
-├── brands/               # Module for brand management
-├── categories/           # Module for category management
-├── inflows/              # Module for stock inflow management
-├── outflows/             # Module for stock outflow management
-├── products/             # Module for product management
-├── suppliers/            # Module for supplier management
-├── Dockerfile            # Docker image definition for the application
-├── docker-compose.yml    # Docker Compose configuration for service orchestration
-├── manage.py             # Django command-line utility
-├── requirements.txt      # Project dependencies
-├── requirements_dev.txt  # Development dependencies
-└── .env                  # Environment variables (not versioned)
+├── app/                  # Configurações globais, URLs principais, views e métricas do dashboard
+├── authentication/       # Módulo de autenticação JWT
+├── brands/               # Módulo para gestão de marcas
+├── categories/           # Módulo para gestão de categorias
+├── inflows/              # Módulo para gestão de entradas de estoque
+├── outflows/             # Módulo para gestão de saídas de estoque
+├── products/             # Módulo para gestão de produtos
+├── suppliers/            # Módulo para gestão de fornecedores
+├── Dockerfile            # Definição da imagem Docker da aplicação
+├── docker-compose.yml    # Configuração do Docker Compose para orquestração de serviços
+├── manage.py             # Utilitário de linha de comando do Django
+├── requirements.txt      # Dependências do projeto
+├── requirements_dev.txt  # Dependências de desenvolvimento
+└── .env                  # Variáveis de ambiente (não versionado)
 ```
 
-## 4. Core Functionalities
+## 4. Funcionalidades Principais
 
-### 4.1. Authentication
+### 4.1. Autenticação
 
-The system uses JWT (JSON Web Tokens) based authentication via `djangorestframework_simplejwt`. The API endpoints for authentication are:
+O sistema utiliza autenticação baseada em JWT (JSON Web Tokens) através do `djangorestframework_simplejwt`. Os endpoints de API para autenticação são:
 
-*   `api/v1/authentication/token/`: Obtain access and refresh tokens.
-*   `api/v1/authentication/token/refresh/`: Renew access token.
-*   `api/v1/authentication/token/verify/`: Verify token validity.
+*   `api/v1/authentication/token/`: Obtenção de tokens de acesso e refresh.
+*   `api/v1/authentication/token/refresh/`: Renovação do token de acesso.
+*   `api/v1/authentication/token/verify/`: Verificação da validade de um token.
 
-Additionally, the application includes login and logout views based on Django's default authentication system.
+Além disso, a aplicação possui views de login e logout baseadas no sistema de autenticação padrão do Django.
 
-### 4.2. Product Management
+### 4.2. Gestão de Produtos
 
-The products module (`products`) is central to the SGE, allowing for comprehensive management of stock items. Functionalities include:
+O módulo de produtos (`products`) é central para o SGE, permitindo o gerenciamento completo dos itens em estoque. As funcionalidades incluem:
 
-*   **Full CRUD:** Creation, reading, updating, and deletion of products via web interface and RESTful API.
-*   **Filters:** Product listing with filters by title, serial number, category, and brand.
-*   **Export:** Export of product data to Excel (`.xlsx`) files, including category, brand, prices, quantity, and creation date.
-*   **Data Modeling:** Each product has a title, category, brand, description, serial number, cost price, selling price, quantity in stock, and creation/update timestamps.
+*   **CRUD Completo:** Criação, leitura, atualização e exclusão de produtos via interface web e API RESTful.
+*   **Filtros:** Listagem de produtos com filtros por título, número de série, categoria e marca.
+*   **Exportação:** Exportação de dados de produtos para arquivos Excel (`.xlsx`), incluindo categoria, marca, preços, quantidade e data de criação.
+*   **Modelagem de Dados:** Cada produto possui título, categoria, marca, descrição, número de série, preço de custo, preço de venda, quantidade em estoque, e timestamps de criação/atualização.
 
-### 4.3. Inflow Management
+### 4.3. Gestão de Entradas (Inflows)
 
-The inflows module (`inflows`) records the entry of products into stock. Key features include:
+O módulo de entradas (`inflows`) registra a entrada de produtos no estoque. As principais características são:
 
-*   **Inflow Registration:** Creation of inflow records, associating a supplier and a product with a specific quantity.
-*   **Automatic Stock Update:** After an inflow is created, the quantity of the corresponding product is automatically incremented in stock.
-*   **Export:** Export of inflow data to Excel (`.xlsx`) files.
+*   **Registro de Entradas:** Criação de registros de entrada, associando um fornecedor e um produto a uma quantidade específica.
+*   **Atualização Automática de Estoque:** Após a criação de uma entrada, a quantidade do produto correspondente é automaticamente incrementada no estoque.
+*   **Exportação:** Exportação de dados de entradas para arquivos Excel (`.xlsx`).
 
-### 4.4. Outflow Management
+### 4.4. Gestão de Saídas (Outflows)
 
-The outflows module (`outflows`) manages the removal of products from stock, representing sales or other movements. Functionalities include:
+O módulo de saídas (`outflows`) gerencia a retirada de produtos do estoque, representando vendas ou outras movimentações. As funcionalidades incluem:
 
-*   **Outflow Registration:** Creation of outflow records, associating a product with a specific quantity.
-*   **Automatic Stock Update:** After an outflow is created, the quantity of the corresponding product is automatically decremented in stock.
-*   **Export:** Export of outflow data to Excel (`.xlsx`) files.
+*   **Registro de Saídas:** Criação de registros de saída, associando um produto a uma quantidade específica.
+*   **Atualização Automática de Estoque:** Após a criação de uma saída, a quantidade do produto correspondente é automaticamente decrementada no estoque.
+*   **Exportação:** Exportação de dados de saídas para arquivos Excel (`.xlsx`).
 
-### 4.5. Brand, Category, and Supplier Management
+### 4.5. Gestão de Marcas, Categorias e Fornecedores
 
-The `brands`, `categories`, and `suppliers` modules provide full CRUD functionalities to manage the system's supporting entities. They include:
+Os módulos `brands`, `categories` e `suppliers` fornecem funcionalidades CRUD completas para gerenciar as entidades de apoio do sistema. Eles incluem:
 
-*   **Full CRUD:** Creation, reading, updating, and deletion of brands, categories, and suppliers via web interface and RESTful API.
-*   **Error Handling:** The brands module, for example, handles `ProtectedError` when attempting to delete a brand associated with products, displaying a user-friendly message.
-*   **Export:** Export of data to Excel (`.xlsx`) files.
+*   **CRUD Completo:** Criação, leitura, atualização e exclusão de marcas, categorias e fornecedores via interface web e API RESTful.
+*   **Tratamento de Erros:** O módulo de marcas, por exemplo, trata `ProtectedError` ao tentar excluir uma marca associada a produtos, exibindo uma mensagem amigável.
+*   **Exportação:** Exportação de dados para arquivos Excel (`.xlsx`).
 
-## 5. Architecture
+## 5. Arquitetura
 
-SGE is a monolithic application based on the Django framework, following the MVT (Model-View-Template) pattern. The API layer is implemented with Django REST Framework, providing a RESTful interface for programmatic interaction.
+O SGE é uma aplicação monolítica baseada no framework Django, seguindo o padrão MVT (Model-View-Template). A camada de API é implementada com Django REST Framework, fornecendo uma interface RESTful para interação programática.
 
-### 5.1. Database
+### 5.1. Banco de Dados
 
-The primary database used is PostgreSQL, configured to run in a separate Docker container. There is also a configuration for SQLite for local development.
+O banco de dados principal utilizado é o PostgreSQL, configurado para ser executado em um contêiner Docker separado. Há também uma configuração para SQLite para desenvolvimento local.
 
-### 5.2. Dockerization
+### 5.2. Dockerização
 
-The application is dockerized to facilitate development, deployment, and scalability. The `Dockerfile` defines the Python application's execution environment, and `docker-compose.yml` orchestrates the application services (web and PostgreSQL database).
+A aplicação é dockerizada para facilitar o desenvolvimento, implantação e escalabilidade. O `Dockerfile` define o ambiente de execução da aplicação Python, e o `docker-compose.yml` orquestra os serviços da aplicação (web e banco de dados PostgreSQL).
 
-## 6. Configuration and Installation
+## 6. Configuração e Instalação
 
-To configure and run the project locally using Docker Compose, follow the steps below:
+Para configurar e executar o projeto localmente usando Docker Compose, siga os passos abaixo:
 
-1.  **Clone the Repository:**
+1.  **Clonar o Repositório:**
     ```bash
     git clone -b develop https://github.com/pombinhagab/sge.git
     cd sge
     ```
 
-2.  **Configure Environment Variables:**
-    Create a `.env` file in the project root with the following variables:
+2.  **Configurar Variáveis de Ambiente:**
+    Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
     ```env
-    SECRET_KEY=your_secret_key_here
+    SECRET_KEY=sua_chave_secreta_aqui
     DEBUG=True
     ```
-    *Replace `your_secret_key_here` with a strong secret key.*
+    *Substitua `sua_chave_secreta_aqui` por uma chave secreta forte.*
 
-3.  **Start Services with Docker Compose:**
+3.  **Iniciar os Serviços com Docker Compose:**
     ```bash
     docker-compose up --build
     ```
-    This command will build the Docker images, create the containers, and start the web application and PostgreSQL database.
+    Este comando irá construir as imagens Docker, criar os contêineres e iniciar a aplicação web e o banco de dados PostgreSQL.
 
-4.  **Access the Application:**
-    The application will be available at `http://localhost:8000`.
+4.  **Acessar a Aplicação:**
+    A aplicação estará disponível em `http://localhost:8000`.
 
-## 7. Metrics and Dashboard
+## 7. Métricas e Dashboard
 
-The application dashboard, accessible on the homepage (`/`), displays important metrics for stock and sales management, calculated in the `app.metrics` module:
+O dashboard da aplicação, acessível na página inicial (`/`), exibe métricas importantes para a gestão de estoque e vendas, calculadas no módulo `app.metrics`:
 
-*   **Product Metrics:** Total stock cost, potential selling value, total product quantity, and potential profit.
-*   **Sales Metrics:** Total outflows, total products sold, total sales value, and total sales profit.
-*   **Daily Sales Data:** Historical series for the last 7 days for total sales value and quantity of products sold.
-*   **Graphs:** Product count by category and by brand, for quick visualization of stock distribution.
+*   **Métricas de Produtos:** Custo total em estoque, valor potencial de venda, quantidade total de produtos e lucro potencial.
+*   **Métricas de Vendas:** Total de saídas, quantidade total de produtos vendidos, valor total das vendas e lucro total das vendas.
+*   **Dados Diários de Vendas:** Séries históricas dos últimos 7 dias para o valor total das vendas e a quantidade de produtos vendidos.
+*   **Gráficos:** Contagem de produtos por categoria e por marca, para visualização rápida da distribuição do estoque.
 
-## 8. RESTful APIs
+## 8. APIs RESTful
 
-In addition to the web interface, SGE exposes a series of RESTful endpoints for each module, allowing integration with other applications. All API endpoints are under the `api/v1/` prefix and require JWT authentication.
+Além da interface web, o SGE expõe uma série de endpoints RESTful para cada módulo, permitindo a integração com outras aplicações. Todos os endpoints de API estão sob o prefixo `api/v1/` e exigem autenticação JWT.
 
-| Module | Endpoints (Examples) |
+| Módulo | Endpoints (Exemplos) |
 |---|---|
-| Authentication | `/api/v1/authentication/token/`, `/api/v1/authentication/token/refresh/`, `/api/v1/authentication/token/verify/` |
-| Products | `/api/v1/products/`, `/api/v1/products/{id}/` |
-| Inflows | `/api/v1/inflows/` |
-| Outflows | `/api/v1/outflows/` |
-| Brands | `/api/v1/brands/`, `/api/v1/brands/{id}/` |
-| Categories | `/api/v1/categories/`, `/api/v1/categories/{id}/` |
-| Suppliers | `/api/v1/suppliers/`, `/api/v1/suppliers/{id}/` |
+| Autenticação | `/api/v1/authentication/token/`, `/api/v1/authentication/token/refresh/`, `/api/v1/authentication/token/verify/` |
+| Produtos | `/api/v1/products/`, `/api/v1/products/{id}/` |
+| Entradas | `/api/v1/inflows/` |
+| Saídas | `/api/v1/outflows/` |
+| Marcas | `/api/v1/brands/`, `/api/v1/brands/{id}/` |
+| Categorias | `/api/v1/categories/`, `/api/v1/categories/{id}/` |
+| Fornecedores | `/api/v1/suppliers/`, `/api/v1/suppliers/{id}/` |
 
-## 9. Final Considerations
+## 9. Considerações Finais
 
-The SGE project demonstrates a robust implementation of a stock management system using Django and Django REST Framework best practices, focusing on modularity, security (JWT), and ease of deployment (Docker). The inclusion of a dashboard with metrics and the ability to export data to Excel adds significant value for business management.
+O projeto SGE demonstra uma implementação robusta de um sistema de gestão de estoque utilizando as melhores práticas do Django e Django REST Framework, com foco em modularidade, segurança (JWT) e facilidade de implantação (Docker). A inclusão de um dashboard com métricas e a capacidade de exportar dados para Excel adicionam valor significativo para o gerenciamento do negócio.
 
 ---
